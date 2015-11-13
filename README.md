@@ -1,0 +1,33 @@
+# DotNetPos
+DotNetPos is an open source tool for transaction Message.</br>
+DotNetPos Support Iso8583,Xml,Excel Format.</br>
+
+DotNetPos also contain tester calss, tester calss generate message (iso8583(transaction card originated messages standard ),xml) and send it to specified host.</br></br>
+
+Example:</br>
+
+            DotNetPosMain pos = new DotNetPosMain("Sender IP Address", Sender Port, DotNetPosMain.MessageType.Iso8583);
+            pos.RecivedIso += pos_RecivedIso;
+            pos.StartListeninigAsyn("Listener Host IPAddress", Listener Host Port);
+
+            DotNetPosMain pos2 = new DotNetPosMain("Sender IP Address", Sender Port, DotNetPosMain.MessageType.Xml);
+            pos2.RecivedXml += Pos2_RecivedXml; ;
+            pos2.StartListeninigAsyn("Listener Host IPAddress", Listener Host Port);
+            
+          private void Pos2_RecivedXml(string xml)
+          {
+           //When Recive Xml Message
+          }
+
+
+          void pos_RecivedIso(string[] iso8583)
+          {
+          //When Recive ISO8583 Message
+            var a = iso8583[(int)MessageParser.NET.Tools.ISO8583.FieldUsage.PANExtendedCountryCode];
+            var b = iso8583[(int)MessageParser.NET.Tools.ISO8583.FieldUsage.PrimaryAccountNumber_PAN];
+            var c = iso8583[(int)MessageParser.NET.Tools.ISO8583.FieldUsage.Application_PAN_Sequencenumber];
+            
+            //Here Edit Recived Message And Send It Back To Sender
+            iso8583[(int)MessageParser.NET.Tools.ISO8583.FieldUsage.PrimaryAccountNumber_PAN] = "1234789412364587";
+            pos.Send(iso8583, "0200");
+          }
