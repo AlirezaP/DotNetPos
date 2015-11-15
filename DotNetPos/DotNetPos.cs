@@ -22,6 +22,7 @@ namespace DotNetPos
         System.Net.IPEndPoint destinationEndPoint;
 
         public enum MessageType { Iso8583, Xml, Excel };
+        public enum CommunicationMode { StreamFile, LengthFirst }
 
         private MessageType _msgType;
 
@@ -47,10 +48,22 @@ namespace DotNetPos
         /// </summary>
         /// <param name="currentHostIP">Current Host IP (Listener Host)</param>
         /// <param name="currentHostPort">Current Host Port (Listener Host)</param>
-        public async void StartListeninigAsyn(string currentHostIP, int currentHostPort)
+        public async void StartListeninigAsyn(string currentHostIP, int currentHostPort,CommunicationMode mode=CommunicationMode.StreamFile)
         {
             socket.ReciveByteIntterupt += socket_ReciveByteIntterupt;
-            await Task.Factory.StartNew(() => { socket.StartListeninig(currentHostIP, currentHostPort, APSocket.Net.Server.CommunicationMode.StreamFile); });
+            switch (mode)
+            {
+                case CommunicationMode.StreamFile:
+                    await Task.Factory.StartNew(() => { socket.StartListeninig(currentHostIP, currentHostPort, APSocket.Net.Server.CommunicationMode.StreamFile); });
+                    break;
+                case CommunicationMode.LengthFirst:
+                    await Task.Factory.StartNew(() => { socket.StartListeninig(currentHostIP, currentHostPort, APSocket.Net.Server.CommunicationMode.LengthFirst); });
+                    break;
+
+                default:
+                    await Task.Factory.StartNew(() => { socket.StartListeninig(currentHostIP, currentHostPort, APSocket.Net.Server.CommunicationMode.StreamFile); });
+                    break;
+            }
         }
 
         void socket_ReciveByteIntterupt(System.Net.Sockets.Socket socket, byte[] data)
@@ -82,11 +95,11 @@ namespace DotNetPos
             });
         }
 
-        public void Send(string[] iso8583, string mti)
+        public void Send(string[] iso8583, string mti,bool firstLenght=false)
         {
             MessageParser.NET.Tools.ISO8583 iso = new MessageParser.NET.Tools.ISO8583();
             Destination.Connect(destinationEndPoint.Address, destinationEndPoint.Port);
-            Destination.Send(Encoding.Unicode.GetBytes(iso.Build(iso8583, mti)));
+            Destination.Send(Encoding.Unicode.GetBytes(iso.Build(iso8583, mti)), firstLenght);
         }
     }
 
@@ -100,7 +113,7 @@ namespace DotNetPos
         /// </summary>
         /// <param name="ipAddress">Host IPAddress</param>
         /// <param name="port">Host Port</param>
-        public void SendIso8583(string ipAddress, int port)
+        public void SendIso8583(string ipAddress, int port,bool firstLenght= false)
         {
             MessageParser.NET.Tools.ISO8583 iso = new MessageParser.NET.Tools.ISO8583();
             Random rand = new Random();
@@ -130,7 +143,7 @@ namespace DotNetPos
 
             APSocket.Net.Client client = new APSocket.Net.Client();
             client.Connect(System.Net.IPAddress.Parse(ipAddress), port);
-            client.SendAsync(Encoding.Unicode.GetBytes(data));
+            client.SendAsync(Encoding.Unicode.GetBytes(data), firstLenght);
         }
 
         /// <summary>
@@ -138,7 +151,7 @@ namespace DotNetPos
         /// </summary>
         /// <param name="ipAddress"></param>
         /// <param name="port"></param>
-        public void SendXml(string ipAddress, int port)
+        public void SendXml(string ipAddress, int port,bool firstLenght=false)
         {
             string xmlData = @"<?xml version='1.0'?>
 < doc >
@@ -194,7 +207,7 @@ namespace DotNetPos
             byte[] data = Encoding.Unicode.GetBytes(xmlData);
             APSocket.Net.Client client = new APSocket.Net.Client();
             client.Connect(System.Net.IPAddress.Parse(ipAddress), port);
-            client.SendAsync(data);
+            client.SendAsync(data, firstLenght);
         }
 
     }

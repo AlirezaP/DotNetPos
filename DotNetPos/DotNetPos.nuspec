@@ -11,7 +11,8 @@
     <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>DotNetPos is an open source tool for transaction Message.
-DotNetPos Support Iso8583,Xml,Excel Format.</description>
+DotNetPos Support Iso8583,Xml,Excel Format.
+For More Info And Example Please Visit https://github.com/AlirezaP/DotNetPos</description>
     <releaseNotes>DotNetPos also contain tester calss, tester calss generate message (iso8583(transaction card originated messages standard ),xml) and send it to specified host.</releaseNotes>
     <copyright>Copyright 2015</copyright>
     <tags>DotNetPos Iso8583 xml excel </tags>
