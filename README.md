@@ -18,7 +18,7 @@ Example:</br>
 
             //OR
             //FirstLengh Mode
-            pos.StartListeninigAsyn("Listener Host IPAddress", Listener Host Port,DotNetPosMain.CommunicationMode.LengthFirst);
+            pos.StartListeninigAsyn("Listener Host IPAddress", ListenerHostPort,DotNetPosMain.CommunicationMode.LengthFirst);
             
             
             DotNetPosMain pos2 = new DotNetPosMain("Sender IP Address", Sender Port, DotNetPosMain.MessageType.Xml);
@@ -27,7 +27,7 @@ Example:</br>
             
             //OR
             //FirstLengh Mode
-            pos2.StartListeninigAsyn("Listener Host IPAddress", Listener Host Port,DotNetPosMain.CommunicationMode.LengthFirst);
+            pos2.StartListeninigAsyn("Listener Host IPAddress",ListenerHostPort,DotNetPosMain.CommunicationMode.LengthFirst);
             
           private void Pos2_RecivedXml(string xml)
           {
