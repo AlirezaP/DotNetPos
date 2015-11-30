@@ -4,6 +4,8 @@ DotNetPos Support Iso8583,Xml,Excel Format.</br>
 
 DotNetPos also contain tester calss, tester calss generate message (iso8583(transaction card originated messages standard ),xml) and send it to specified host.</br></br>
 
+Nuget Url: http://www.nuget.org/packages/DotNetPos/ </br>
+
 CommunicationMode:</br>
 1- StreamFile: This mode is for Reciving a file streamly.
 
